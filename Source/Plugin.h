@@ -36,10 +36,10 @@
 #define PLUGIN_NAME          "AndroidLogger"
 #define PLUGIN_NAME_UNICODE  L"AndroidLogger"
 #define LEXER_NAME           "AndroidLog Lexer"
-#define MSGBOX_TITLE         L"AndroidLogger v1.2.7"
+#define MSGBOX_TITLE         L"AndroidLogger v1.2.8"
 
 #define MAX_MENU_ITEMS       10
-#define MAX_LOG_LINES        200000
+#define MAX_LOG_LINES        990000
 
 struct PluginSettings {
 	TCHAR workingDirectory[MAX_PATH]; // default = D:\AndroidLogger

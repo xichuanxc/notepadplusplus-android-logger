@@ -26,7 +26,9 @@ René Nyffenegger rene.nyffenegger@adp-gmbh.ch
 
 
 #include "Socket.h"
+#include "DebugTrace.h"
 #include <iostream>
+#include "StringUtils.h"
 
 using namespace std;
 
@@ -139,6 +141,7 @@ std::string Socket::ReceiveLines() {
         ret += t;
     }
 
+	_xxDebugTrace(TEXT("RecvLines = [%s], Len=[%d]"), SU::Utf8ToTChar(ret.c_str()), ret.length());
     return ret;
 }
 
@@ -165,6 +168,7 @@ std::string Socket::ReceiveLine() {
 
         ret += r;
         if (r == '\n')  {
+			_xxDebugTrace(TEXT("RecvLine=[%s], Len=[%d]"), SU::Utf8ToTChar(ret.c_str()), ret.length());
             return ret;
         }
     }
@@ -228,7 +232,8 @@ BYTE* Socket::ReceiveBytes(int len) {
 }
 
 void Socket::SendLine(std::string s) {
-    s += '\n';
+    //s += '\n';
+	_xxDebugTrace(TEXT("SendLine=[%s], Len=[%d]"), SU::Utf8ToTChar(s.c_str()), s.length());
     send(s_,s.c_str(),s.length(),0);
 }
 

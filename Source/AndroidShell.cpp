@@ -21,6 +21,8 @@
 #include "FilerPanel.h"
 #include "Plugin.h"
 #include <time.h>
+#include "DebugTrace.h"
+#include "StringUtils.h"
 
 bool AndroidShell::sendShellCmd() {
 	if (mHandleSemaphore != INVALID_HANDLE_VALUE) {
@@ -42,10 +44,12 @@ bool AndroidShell::sendShellCmd() {
 	}
 
 	mSocket->SendLine(cmd);
+	_xxDebugTrace(TEXT("start RecvLine in sendShellCmd() 111"));
 	std::string echo = mSocket->ReceiveLine();
 
 	// disconnected by usr press menu or device lost
-	if (echo.size() == 0){ 
+	if (echo.size() == 0) {
+		//::MessageBox(nullptr, L"echo.size() == 0", MSGBOX_TITLE, MB_OK);
 		return false;
 	}
 
@@ -78,6 +82,7 @@ bool AndroidShell::sendShellCmd() {
 
 	// sent shell cmd, get the echo: shell@android $ ls -l
 	while (echo.find(cmd) == std::string::npos) {
+		_xxDebugTrace(TEXT("start RecvLine in sendShellCmd() 222"));
 		echo = mSocket->ReceiveLine();
 		if (echo.size() == 0) {
 			return false;
@@ -157,6 +162,7 @@ void AndroidShell::appendShellCmd(std::string &cmd) {
 	}
 }
 
+
 bool AndroidShell::getShellPrompt() {
 	sendLine("\0");
 
@@ -165,6 +171,8 @@ bool AndroidShell::getShellPrompt() {
 
 	getLine(echo);
 	getLine(mShellPrompt);
+	
+	_xxDebugTrace(TEXT("echo=[%s], size=%d, mShellPrompt=[%s] size=%d"), SU::Utf8ToTChar(echo.c_str()), echo.size(), SU::Utf8ToTChar(mShellPrompt.c_str()), mShellPrompt.size());
 
 	if (mShellPrompt.empty()){
 		return false;
@@ -177,6 +185,8 @@ bool AndroidShell::getShellPrompt() {
 
 	//shell@andoroid:
 	mShellPrompt = mShellPrompt.substr(0, mShellPrompt.find_first_of('/'));
+
+	_xxDebugTrace(TEXT("mShellPrompt2=[%s] size2=%d"), SU::Utf8ToTChar(mShellPrompt.c_str()), mShellPrompt.size());
 	return mShellPrompt.size() > 0;
 }
 
@@ -208,7 +218,7 @@ bool AndroidShell::onStart() {
 }
 
 void AndroidShell::onExit() {
-    appendLogToNpp(std::string("\n---- exit ----"));
+    appendLogToNpp(std::string("\n------------ Exit ------------\n"));
     release();
     ::PostMessage(g_nppData._nppHandle, NPPM_SETMENUITEMCHECK, (WPARAM)g_menuFuncs[0]._cmdID, (LPARAM)false);
     ::PostMessage(g_nppData._nppHandle, NPPM_SETMENUITEMCHECK, (WPARAM)g_menuFuncs[1]._cmdID, (LPARAM)false);
@@ -221,6 +231,7 @@ void AndroidShell::onExit() {
 bool AndroidShell::onLoop() {
     std::string line;
 
+	_xxDebugTrace(TEXT("start RecvLine in sendShellCmd() 333"));
     int size = getLine(line);
 	bool doubleCrEnd = (size > 3) && (line[size-3] == '\r');
 
@@ -231,12 +242,14 @@ bool AndroidShell::onLoop() {
 		if ( isPromtLine || mIsCatCmd == false ) {
 			
 			std::string test;
-
+			_xxDebugTrace(TEXT("start RecvLine in sendShellCmd() 444"));
 			test = mSocket->ReceiveLines();		
 
 			std::string::size_type pos = line.find("\r\r\n");
-			line.replace(pos, 3, "\r\n");
-
+			if (pos != std::string::npos) {
+				line.replace(pos, 3, "\r\n");
+			}
+			
 			mLogLines += line;
 			appendLogToNpp(mLogLines);
 
@@ -269,12 +282,14 @@ bool AndroidShell::onLoop() {
         }
     }
 
-	if ((!mIsLogcat) || (mIsLogcat && logFilter(line))) {
+	_xxDebugTrace(TEXT("mIsLogcat=[%d], logFilter(line)=%d"), mIsLogcat, logFilter(line));
+	if ( (!mIsLogcat) || (mIsLogcat && logFilter(line)) ) {
 		mLogLines += line;
 		mLinesCount += 1;
 	}
 
     /** interval too short **/
+	_xxDebugTrace(TEXT("cost=[%f], mIsContinue=%d"), cost, mIsContinue);
     if ( cost < 20 ) {
         return mIsContinue;
     }
@@ -285,7 +300,7 @@ bool AndroidShell::onLoop() {
     }
 
     /** too many lines ! **/
-    if ( mLinesCount > 200000 ) {
+    if ( mLinesCount > 990000 ) {
         return false;
     }
 

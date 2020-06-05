@@ -33,11 +33,20 @@ int ShellPanel::Create(HWND hParent, HWND hNpp, int MenuID, int MenuCommand) {
 									0, 0, 10, 10,
 									m_hwnd, NULL, m_hInstance, NULL);
 
+#ifdef _WIN64
+	m_scintillaDefaultProc = reinterpret_cast<WNDPROC>(
+			::SetWindowLong(m_hScintilla, GWLP_WNDPROC, reinterpret_cast<LONG>(scintillaStatic_Proc))
+	);
+
+	::SetWindowLongPtr(m_hScintilla, GWLP_USERDATA, reinterpret_cast<LONG>(this));
+
+#else
 	m_scintillaDefaultProc = reinterpret_cast<WNDPROC>(
 			::SetWindowLong(m_hScintilla, GWL_WNDPROC, reinterpret_cast<LONG>(scintillaStatic_Proc))
 	);
 
 	::SetWindowLongPtr(m_hScintilla, GWL_USERDATA, reinterpret_cast<LONG>(this));
+#endif
 
 	if (m_hScintilla == NULL) {
 		DockableWindow::Destroy();
@@ -100,7 +109,11 @@ int ShellPanel::RegisterClass() {
 }
 
 LRESULT CALLBACK ShellPanel::scintillaStatic_Proc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+#ifdef _WIN64
+	ShellPanel *pShellPanel = (ShellPanel *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA));
+#else
 	ShellPanel *pShellPanel = (ShellPanel *)(::GetWindowLongPtr(hwnd, GWL_USERDATA));
+#endif
 	LRESULT ret = 1;
 
 	ret = pShellPanel->ShellProc(uMsg, wParam, lParam);

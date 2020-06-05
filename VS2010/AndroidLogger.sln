@@ -3,32 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AndroidLogger", "AndroidLogger.vcxproj", "{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Notepad++", "..\..\..\npp.6.7.2.src\PowerEditor\visual.net\notepadPlus.vcxproj", "{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
 		Unicode Debug|Win32 = Unicode Debug|Win32
+		Unicode Debug|x64 = Unicode Debug|x64
 		Unicode Release|Win32 = Unicode Release|Win32
+		Unicode Release|x64 = Unicode Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Debug|Win32.Build.0 = Debug|Win32
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Debug|x64.ActiveCfg = Debug|x64
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Debug|x64.Build.0 = Debug|x64
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Release|Win32.ActiveCfg = Release|Win32
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Release|Win32.Build.0 = Release|Win32
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Release|x64.ActiveCfg = Release|x64
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Release|x64.Build.0 = Release|x64
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Debug|Win32.ActiveCfg = Debug|Win32
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Debug|Win32.Build.0 = Debug|Win32
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Debug|x64.ActiveCfg = Debug|x64
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Debug|x64.Build.0 = Debug|x64
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Release|Win32.ActiveCfg = Release|Win32
 		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Release|Win32.Build.0 = Release|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Debug|Win32.ActiveCfg = Unicode Debug|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Debug|Win32.Build.0 = Unicode Debug|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Release|Win32.ActiveCfg = Unicode Release|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Release|Win32.Build.0 = Unicode Release|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Unicode Release|Win32.ActiveCfg = Unicode Release|Win32
-		{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}.Unicode Release|Win32.Build.0 = Unicode Release|Win32
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Release|x64.ActiveCfg = Release|x64
+		{1C3EF5E5-CAA3-40A3-80E2-938514F4022D}.Unicode Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

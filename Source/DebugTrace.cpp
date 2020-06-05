@@ -21,7 +21,7 @@
 #include <windows.h>
 #include "tchar.h"
 
-#define DT_BUFFER_SIZE 512
+#define DT_BUFFER_SIZE 1024
 
 /**
  *  @brief Sends printf-like formatted message to debug console

@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <process.h>
 #include <sstream>
+#include <atlconv.h>
 #include "AndroidDevice.h"
 
 struct Args{
@@ -25,6 +26,8 @@ std::string DeviceBase::formAdbRequest(const char *req){
     ss<<std::hex<<std::setw(4)<<std::setfill('0')<<strlen(req);
     ss<<req;
     result = ss.str();
+
+	//::MessageBox(nullptr, result.c_str(), MSGBOX_TITLE, MB_OK);
     return result;
 }
 

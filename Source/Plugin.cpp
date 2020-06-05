@@ -21,10 +21,21 @@
 #include "resource.h"
 #include <vector>
 #include <Shellapi.h>
+#include <stdio.h>
+#include <iomanip>
 #include "Window.h"
 #include "FilerPanel.h"
 #include "ShellPanel.h"
 #include "SettingsDialog.h"
+#include "AndroidDevice.h"
+#include "DebugTrace.h"
+#include "DeviceBase.h"
+#include "Plugin.h"
+#include <sstream>
+#include <iomanip>
+#include <process.h>
+#include <sstream>
+#include <atlconv.h>
 #include "AndroidDevice.h"
 
 #define IsValidLevel(l) (l[0] == L'V' || l[0] == L'D' || l[0] == L'I' || l[0] == L'W' || l[0] == L'E')
@@ -295,6 +306,9 @@ void onMenuLogApp() {
 		delete level;
 	}
 
+	//::MessageBox(nullptr, SU::Utf8ToTChar(cmd.c_str()), MSGBOX_TITLE, MB_OK);
+
+	_xxDebugTrace(TEXT("cmd=[%s]"), SU::Utf8ToTChar(cmd.c_str()));
     if (shellCmd(cmd)) {
         ::SendMessage(g_nppData._nppHandle, NPPM_SETMENUITEMCHECK, (WPARAM)g_menuFuncs[0]._cmdID, (LPARAM)true);
     }
@@ -415,6 +429,10 @@ bool logFilter(std::string &curLine) {
 		return true;
 	}
 	
+	if (g_pluginSettings.asTag) {
+		return true;
+	}
+
 	int size = g_keyWords.size();
 
 	if (size == 0) {
@@ -474,10 +492,30 @@ bool appendLogToNpp(std::string &log) {
     if (which == -1) {
         return false;
     }
-    HWND curScintilla = (which == 0)?g_nppData._scintillaMainHandle:g_nppData._scintillaSecondHandle;
+    
+	HWND curScintilla = (which == 0)?g_nppData._scintillaMainHandle:g_nppData._scintillaSecondHandle;
+	
+	// Max line in text box
+	int maxLine = ::SendMessage(curScintilla, SCI_GETLINECOUNT, 0, 0);
 
+	// Current Line in text box
+	int currLine = ::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTLINE, 0, 0);
+
+	// Visable lines on screen
+	int linesOnScreen = ::SendMessage(curScintilla, SCI_LINESONSCREEN, 0, 0);
+
+	// First visible line on screen
+	int firstVisibleLine = ::SendMessage(curScintilla, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	
+	
+	//_xxDebugTrace(TEXT("currLine=%d, maxLine=%d, linesOnScreen=%d, firstVisibleLine=%d"), currLine, maxLine, linesOnScreen, firstVisibleLine);
+
+	//Send log message to text box
     ::SendMessage(curScintilla, SCI_APPENDTEXT, log.length(), (LPARAM)log.c_str());
-    ::PostMessage(curScintilla, SCI_SCROLLTOEND, 0, 0);
+
+	//只有当前在最底部的时候才会自动scroll到end，否则数据追加但不会scroll，方便看日志使用(一旦切换窗口也不会scroll了)
+	if( (maxLine - firstVisibleLine) <= linesOnScreen)
+		::PostMessage(curScintilla, SCI_SCROLLTOEND, 0, 0);
     return true;
 }
 
